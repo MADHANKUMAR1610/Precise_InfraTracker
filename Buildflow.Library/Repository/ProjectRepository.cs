@@ -867,6 +867,37 @@ parameters.Add("p_boq_items_data", JsonConvert.SerializeObject(formattedItems), 
                 };
             }
         }
+            public async Task<IEnumerable<ProjectDto>> GetApprovedProjectsForUserAsync(int empId, string role)
+        {
+            var query = from p in Context.Projects
+                        join pt in Context.ProjectTypes on p.ProjectTypeId equals pt.ProjectTypeId
+                        join ps in Context.ProjectSectors on p.ProjectSectorId equals ps.ProjectSectorId into psJoin
+                        from ps in psJoin.DefaultIfEmpty()
+                        where p.ProjectStatus == "Approved" && p.IsActive == true
+                        select new ProjectDto
+                        {
+                            project_id = p.ProjectId,
+                            project_name = p.ProjectName,
+                            project_description = p.ProjectDescription,
+                            project_type_id = p.ProjectTypeId,
+                            project_type_name = pt.ProjectTypeName,
+                            project_sector_id = ps != null ? ps.ProjectSectorId : 0,
+                            project_sector_name = ps != null ? ps.ProjectSectorName : string.Empty,
+                            project_status = p.ProjectStatus,
+                            project_start_date = p.ProjectStartDate.ToDateTime(TimeOnly.MinValue),
+                            project_end_date = p.ProjectEndDate.HasValue ? p.ProjectEndDate.Value.ToDateTime(TimeOnly.MinValue) : DateTime.MinValue,
+                            project_total_budget = p.ProjectTotalBudget,
+                            client_name = p.ClientName,
+                            project_location = p.ProjectLocation,
+                            vendor_names = "", // populate if you have joins
+                            subcontractor_names = "",
+                            project_manager_names = "",
+                            ticket_count = 0 // set or join if applicable
+                        };
+
+            var result = await query.ToListAsync();
+            return result;
+        }
 
     }
 }

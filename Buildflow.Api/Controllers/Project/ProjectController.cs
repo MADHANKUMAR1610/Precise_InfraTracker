@@ -513,6 +513,13 @@ namespace Buildflow.Api.Controllers.Project
 
 
         }
+        //Get projects assigned to logged-in user based on role
+        [HttpGet("approved-projects/{userId}/{role}")]
+        public async Task<IActionResult> GetApprovedProjectsForUser(int userId, string role)
+        {
+            var projects = await _projectService.GetApprovedProjectsForUserAsync(userId, role);
+            return Ok(projects);
+        }
     }
 }
 

@@ -31,6 +31,8 @@ namespace Buildflow.Library.Repository.Interfaces
         Task<BaseResponse> UpsertProjectTeam(ProjectTeamInputDto dto);
 
         Task<(bool Success, string Message, object Data)> UpsertProjectTeamAsync(ProjectTeamUpsertDto dto);
-       
+        Task<IEnumerable<ProjectDto>> GetApprovedProjectsForUserAsync(int empId, string role);
+
+
     }
 }

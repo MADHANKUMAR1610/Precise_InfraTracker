@@ -103,10 +103,13 @@ public partial class BuildflowAppContext : DbContext
     public virtual DbSet<Vendor> Vendors { get; set; }
 
     public virtual DbSet<Vendorrole> Vendorroles { get; set; }
+    public virtual DbSet<StockInward> StockInwards { get; set; }
+    public virtual DbSet<StockOutward> StockOutwards { get; set; }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseNpgsql("Host=103.91.186.169;Port=5432;Database=buildflow_demo;Username=postgres;Password=Admin@123");
+
+    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+    //        => optionsBuilder.UseNpgsql("Host=103.91.186.169;Port=5432;Database=buildflow_demo;Username=postgres;Password=Admin@123");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -482,6 +485,37 @@ public partial class BuildflowAppContext : DbContext
                 .HasColumnName("updated_at");
             entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
         });
+        // Configure entity relationships and table names if needed
+        modelBuilder.Entity<ProjectTeam>()
+            .HasOne(pt => pt.Project)
+            .WithMany(p => p.ProjectTeams)
+            .HasForeignKey(pt => pt.ProjectId);
+
+        // Example: StockInward relationships
+        modelBuilder.Entity<StockInward>()
+            .HasOne(s => s.Vendor)
+            .WithMany()
+            .HasForeignKey(s => s.VendorId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<StockInward>()
+            .HasOne(s => s.ReceivedByEmployee)
+            .WithMany()
+            .HasForeignKey(s => s.ReceivedById)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Example: StockOutward relationships
+        modelBuilder.Entity<StockOutward>()
+    .HasOne(s => s.RequestedByEmployee)
+    .WithMany()
+    .HasForeignKey(s => s.RequestedById)
+    .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<StockOutward>()
+            .HasOne(s => s.IssuedToEmployee)
+            .WithMany()
+            .HasForeignKey(s => s.IssuedToId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<EmployeeRole>(entity =>
         {

@@ -64,10 +64,12 @@ namespace Buildflow.Library.UOW
         private readonly BuildflowAppContext _context;
         private readonly ILogger<UnitOfWork> _logger;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<InventoryRepository> inventoryLogger;
+
         public IProjectRepository Boq { get; private set; }
         public IReportRepository reportRepository { get; private set; }
 
-        
+        public  IInventoryRepository InventoryRepository { get; private set; }
         public INotificationRepository NotificationRepository { get; private set; }
         public IEmployeeRepository EmployeeRepository { get; private set; }
         public IProjectRepository ProjectTeam { get; private set; }
@@ -90,6 +92,7 @@ namespace Buildflow.Library.UOW
         public IProjectRepository ProjectPermissionFinanceApprovals { get; private set; }
 
         public IProjectRepository ProjectMilestones {  get; private set; }
+       
 
 
         public UnitOfWork(
@@ -102,7 +105,10 @@ namespace Buildflow.Library.UOW
             ILogger<GenericRepository<EmployeeDetail>> employeeLogger,
             ILogger<GenericRepository<Report>> reportLogger,
            ILogger<GenericRepository<Ticket>> ticketLogger,
-           ILogger<GenericRepository<Vendor>> vendorLogger,
+           
+
+        ILogger<GenericRepository<Vendor>> vendorLogger,
+          
             IRoleRepository roles,
             IDepartmentRepository depts
 
@@ -135,8 +141,8 @@ namespace Buildflow.Library.UOW
             ProjectPermissionFinanceApprovals = new ProjectRepository(_configuration, _context, projectLogger);
             ProjectMilestones=new ProjectRepository(_configuration, _context, projectLogger);
             ProjectMilestone = new ProjectRepository(_configuration, _context, projectLogger);
-            NotificationRepository = new NotificationRepository(configuration, context, notificationLogger); 
-
+            NotificationRepository = new NotificationRepository(configuration, context, notificationLogger);
+            InventoryRepository = new InventoryRepository(_configuration, _context, inventoryLogger);
 
 
 
