@@ -92,7 +92,11 @@ namespace Buildflow.Library.UOW
         public IProjectRepository ProjectPermissionFinanceApprovals { get; private set; }
 
         public IProjectRepository ProjectMilestones {  get; private set; }
-       
+        public IMaterialRepository MaterialRepository { get; private set; }
+        public IInventoryMaterialRepository InventoryMaterialRepository { get; private set; }
+
+
+
 
 
         public UnitOfWork(
@@ -143,6 +147,12 @@ namespace Buildflow.Library.UOW
             ProjectMilestone = new ProjectRepository(_configuration, _context, projectLogger);
             NotificationRepository = new NotificationRepository(configuration, context, notificationLogger);
             InventoryRepository = new InventoryRepository(_configuration, _context, inventoryLogger);
+            MaterialRepository = new MaterialRepository(_context);
+            InventoryMaterialRepository = new InventoryMaterialRepository(_context);
+
+
+
+
 
 
 

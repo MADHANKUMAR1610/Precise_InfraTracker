@@ -7,7 +7,9 @@ using Buildflow.Library.UOW;
 using Buildflow.Service.Service;
 using Buildflow.Service.Service.Employee;
 using Buildflow.Service.Service.Inventory;
+using Buildflow.Service.Service.InventoryMaterial;
 using Buildflow.Service.Service.Master;
+using Buildflow.Service.Service.Material;
 using Buildflow.Service.Service.Notification;
 using Buildflow.Service.Service.Project;
 using Buildflow.Service.Service.Report;
@@ -107,6 +109,12 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+// Repositories
+builder.Services.AddScoped<IInventoryMaterialRepository, InventoryMaterialRepository>();
+
+
+
+
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<RegisterService>();
@@ -114,7 +122,10 @@ builder.Services.AddScoped<ReportService>();
 builder.Services.AddScoped<ProjectService>();
 builder.Services.AddScoped<RoleService>();
 builder.Services.AddScoped<DepartmentService>();
+builder.Services.AddScoped<IMaterialService, MaterialService>();
 builder.Services.AddScoped<NotificationService>();
+builder.Services.AddScoped<IInventoryMaterialService, InventoryMaterialService>();
+
 builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<VendorService>();
 builder.Services.AddHttpContextAccessor();
